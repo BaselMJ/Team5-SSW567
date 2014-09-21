@@ -1,22 +1,80 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Basel Aljarallh
 
-# Custom for Visual Studio
-*.cs     diff=csharp
-*.sln    merge=union
-*.csproj merge=union
-*.vbproj merge=union
-*.fsproj merge=union
-*.dbproj merge=union
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
-# Standard to msysgit
-*.doc	 diff=astextplain
-*.DOC	 diff=astextplain
-*.docx diff=astextplain
-*.DOCX diff=astextplain
-*.dot  diff=astextplain
-*.DOT  diff=astextplain
-*.pdf  diff=astextplain
-*.PDF	 diff=astextplain
-*.rtf	 diff=astextplain
-*.RTF	 diff=astextplain
+using namespace std;
+
+bool Depth(int shallow=0,int Deep=0){	
+	if(shallow>3 && shallow<=(Deep/2) && Deep<15 ) 
+	return true;
+	else return false;
+}
+
+bool Area(int length=0,int width=0){	
+	if(width>10 && width<=(length/2) && length<40 ) 
+	return true;
+	else return false;
+}
+
+int check(string input)
+{
+	double number;
+	if ( ! (istringstream(input) >> number) ) number = 0;
+	int y=0;
+		y=number;
+	if(y!=number|| number==0 ) return -1;
+	else if(y<4||y>39) return -1;
+	else return number;
+}
+
+int main () {
+  string customerName= "";
+  string length,width,shallowD,DeepD="";
+  int Clength,Cwidth,CshallowD,CDeepD=0;
+  ifstream input ("text.txt");
+  if (input.is_open())
+  {
+    while ( true )
+    {
+        input >> customerName;
+  		input >> length;
+ 		input >> width; 
+  		input >> shallowD; 
+  		input >> DeepD; 
+  		if( input.eof() ) break;
+  		
+  		Clength=check(length);
+		Cwidth=check(width);
+		CshallowD=check(shallowD);
+		CDeepD=check(DeepD);
+		if(Clength==-1||Cwidth==-1||CshallowD==-1||CDeepD==-1) {
+		cout<< "Customer Name: "<<customerName  << ": Invalid iputs\n"; 
+		continue;
+		}
+		else {
+	
+  		bool x=Area(Clength,Cwidth);
+  		bool y=Depth(CshallowD,CDeepD);
+  		
+		if(x==true && y==true){
+        cout << "Customer Name: "<<customerName <<"| length: "<<length<<" width: "<< width <<" shallowD: "<<shallowD <<" DeepD: "<<DeepD <<"\n";
+		}	
+	    if (x==false && y==false) cout<< "Customer Name: "<<customerName  << ": Invalid Area & Depth values\n";
+	    if (x==false && y==true) cout<< "Customer Name: "<<customerName  << ": Invalid Area values\n";
+		if (x==true && y==false) cout<< "Customer Name: "<<customerName  << ": Invalid Depth values\n";
+	
+			}
+    }
+
+    input.close();
+    
+  }
+  else cout << "Could not read the file";
+	
+	system("pause");
+    return 0;
+
+}
